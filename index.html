@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>دروس Java - شرح ثم كود</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      direction: rtl;
+      background-color: #f5f5f5;
+    }
+
+    .sidebar {
+      height: 100vh;
+      width: 250px;
+      position: fixed;
+      background-color: #222;
+      padding-top: 20px;
+      color: white;
+      overflow-y: auto;
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .lesson-group {
+      border-bottom: 1px solid #444;
+      padding-bottom: 10px;
+    }
+
+    .dropdown-title {
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      background-color: #333;
+    }
+
+    .submenu {
+      display: none;
+      padding-right: 10px;
+      background-color: #2d2d2d;
+    }
+
+    .submenu a {
+      padding: 8px 30px;
+      display: block;
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    .submenu a:hover,
+    .sidebar a:hover {
+      background-color: #4CAF50;
+    }
+
+    .main {
+      margin-right: 250px;
+      padding: 20px;
+    }
+
+    .lesson-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .lesson-text {
+      text-align: right;
+      margin-bottom: 30px;
+    }
+
+    .lesson-code {
+      direction: ltr;
+      text-align: left;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-family: monospace;
+      font-size: 16px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      margin-top: 10px;
+    }
+
+    .run-button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .run-button:hover {
+      background-color: #45a049;
+    }
+
+    .chat-container {
+      margin-top: 30px;
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+    }
+
+    .chat-box {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .chat-response {
+      background-color: #e8f5e9;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .question-container {
+      margin-bottom: 20px;
+    }
+
+    .question-container input {
+      margin-top: 10px;
+    }
+
+    .results {
+      margin-top: 20px;
+    }
+
+    .score {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        margin-right: 0;
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h3>📘 دروس Java</h3>
+
+  <div class="lesson-group">
+    <a href="#" onclick="loadLesson('intro')">📌 مقدمة</a>
+  </div>
+
+  <div class="lesson-group">
+    <div class="dropdown-title" onclick="toggleSubmenu('basics')">💡 الأساسيات ▾</div>
+    <div class="submenu" id="basics">
+      <a href="#" onclick="loadLesson('variables')">المتغيرات</a>
+      <a href="#" onclick="loadLesson('datatypes')">أنواع البيانات</a>
+      <a href="#" onclick="loadLesson('operators')">المعاملات</a>
+    </div>
+  </div>
+
+  <div class="lesson-group">
+    <div class="dropdown-title" onclick="toggleSubmenu('control')">🔁 التحكم ▾</div>
+    <div class="submenu" id="control">
+      <a href="#" onclick="loadLesson('if')">الشروط (if)</a>
+      <a href="#" onclick="loadLesson('loops')">الحلقات (for/while)</a>
+    </div>
+  </div>
+
+  <div class="lesson-group">
+    <div class="dropdown-title" onclick="toggleSubmenu('quiz')">❓ اختبر نفسك ▾</div>
+    <div class="submenu" id="quiz">
+      <a href="#" onclick="loadQuiz('variablesQuiz')">اختبار المتغيرات</a>
+      <a href="#" onclick="loadQuiz('controlQuiz')">اختبار التحكم</a>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="lesson-content" id="lessonContent">
+    <h2>مرحبًا بك!</h2>
+    <p>اختر درسًا من الشريط الجانبي.</p>
+  </div>
+</div>
+
+<script>
+  const lessons = {
+    intro: ` 
+      <div class="lesson-text">
+        <h2>مقدمة عن Java</h2>
+        <p>Java هي لغة برمجة متعددة المنصات، تعتمد على الكائنات (Object-Oriented)، وتُستخدم في تطوير التطبيقات والأنظمة.</p>
+      </div>
+      <div class="lesson-code">
+        <h3>جرب هذا الكود:</h3>
+        <textarea id="codeEditor">
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("مرحباً يا وائل!");
+    }
+}
+        </textarea>
+        <button class="run-button" onclick="runCode()">تشغيل الكود</button>
+      </div>
+      <div class="chat-container">
+        <h3>سؤال إلى الذكاء الاصطناعي</h3>
+        <input id="chatInput" class="chat-box" type="text" placeholder="اكتب استفسارك هنا...">
+        <button class="run-button" onclick="askChat()">إرسال الاستفسار</button>
+        <div id="chatResponse" class="chat-response" style="display:none;"></div>
+      </div>
+    `,
+    variables: `
+      <div class="lesson-text">
+        <h2>المتغيرات في Java</h2>
+        <p>المتغيرات تُستخدم لتخزين البيانات مثل الأرقام والنصوص. مثلاً:</p>
+      </div>
+      <div class="lesson-code">
+        <textarea id="codeEditor">
+int age = 25;
+String name = "Wael";
+System.out.println(name + " عمره " + age + " سنة");
+        </textarea>
+        <button class="run-button" onclick="runCode()">تشغيل الكود</button>
+      </div>
+      <div class="chat-container">
+        <h3>سؤال إلى الذكاء الاصطناعي</h3>
+        <input id="chatInput" class="chat-box" type="text" placeholder="اكتب استفسارك هنا...">
+        <button class="run-button" onclick="askChat()">إرسال الاستفسار</button>
+        <div id="chatResponse" class="chat-response" style="display:none;"></div>
+      </div>
+    `
+  };
+
+  const quizzes = {
+    variablesQuiz: `
+      <div class="question-container">
+        <h3>اختبار المتغيرات (اختيار من متعدد):</h3>
+        <p>س: ما هي وظيفة الكود الذي في الأعلى؟</p>
+        <input type="radio" id="answer1" name="question1" value="1">
+        <label for="answer1">يتم طباعة اسم وعمر الشخص.</label><br>
+        <input type="radio" id="answer2" name="question1" value="0">
+        <label for="answer2">يتم إجراء عملية جمع.</label><br>
+        <input type="radio" id="answer3" name="question1" value="0">
+        <label for="answer3">يتم تخزين الاسم في قاعدة بيانات.</label><br>
+      </div>
+      <div class="question-container">
+        <p>س: ما هو نوع البيانات المستخدم لتخزين "Wael"؟</p>
+        <input type="radio" id="answer4" name="question2" value="1">
+        <label for="answer4">String</label><br>
+        <input type="radio" id="answer5" name="question2" value="0">
+        <label for="answer5">int</label><br>
+        <input type="radio" id="answer6" name="question2" value="0">
+        <label for="answer6">boolean</label><br>
+      </div>
+      <div class="question-container">
+        <p>س: في الكود، أي سطر من الأسطر يُستخدم لطباعة النتائج؟</p>
+        <input type="radio" id="answer7" name="question3" value="1">
+        <label for="answer7">System.out.println(name + " عمره " + age + " سنة");</label><br>
+        <input type="radio" id="answer8" name="question3" value="0">
+        <label for="answer8">int age = 25;</label><br>
+        <input type="radio" id="answer9" name="question3" value="0">
+        <label for="answer9">String name = "Wael";</label><br>
+      </div>
+      <div class="question-container">
+        <p>س: ما هي الوظيفة الرئيسية للمتغيرات في Java؟</p>
+        <input type="radio" id="answer10" name="question4" value="1">
+        <label for="answer10">لتخزين القيم لتستخدمها في العمليات الحسابية أو الطباعة.</label><br>
+        <input type="radio" id="answer11" name="question4" value="0">
+        <label for="answer11">لتكرار نفس الكود عدة مرات.</label><br>
+      </div>
+      <div class="question-container">
+        <h3>اختبار المتغيرات (صح وخطأ):</h3>
+        <p>1. المتغيرات في Java يمكن أن تخزن أي نوع من البيانات، مثل النصوص والأرقام.</p>
+        <input type="radio" id="true1" name="truefalse1" value="1">
+        <label for="true1">صح</label><br>
+        <input type="radio" id="false1" name="truefalse1" value="0">
+        <label for="false1">خطأ</label><br>
+      </div>
+      <div class="question-container">
+        <p>2. في Java، يمكن للمتغيرات من نفس النوع أن تخزن قيم مختلفة في نفس الوقت.</p>
+        <input type="radio" id="true2" name="truefalse2" value="1">
+        <label for="true2">صح</label><br>
+        <input type="radio" id="false2" name="truefalse2" value="0">
+        <label for="false2">خطأ</label><br>
+      </div>
+      <div class="question-container">
+        <p>3. لا يمكن تغيير قيمة المتغير بعد تخصيصها في Java.</p>
+        <input type="radio" id="true3" name="truefalse3" value="0">
+        <label for="true3">صح</label><br>
+        <input type="radio" id="false3" name="truefalse3" value="1">
+        <label for="false3">خطأ</label><br>
+      </div>
+      <div class="question-container">
+        <p>4. المتغيرات من نوع "int" يمكنها تخزين القيم العشرية في Java.</p>
+        <input type="radio" id="true4" name="truefalse4" value="0">
+        <label for="true4">صح</label><br>
+        <input type="radio" id="false4" name="truefalse4" value="1">
+        <label for="false4">خطأ</label><br>
+      </div>
+      <button class="run-button" onclick="submitQuizAnswers()">إرسال الإجابات</button>
+      <div id="results" class="results" style="display:none;">
+        <h3>النتيجة:</h3>
+        <div class="score" id="score"></div>
+        <div class="score" id="percentage"></div>
+      </div>
+    `
+  };
+
+  let score = 0;
+  let totalQuestions = 0;
+
+  function toggleSubmenu(id) {
+    const submenu = document.getElementById(id);
+    submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+  }
+
+  function loadLesson(lessonKey) {
+    document.getElementById("lessonContent").innerHTML = lessons[lessonKey];
+  }
+
+  function loadQuiz(quizKey) {
+    document.getElementById("lessonContent").innerHTML = quizzes[quizKey];
+  }
+
+  function submitQuizAnswers() {
+    const answers = document.querySelectorAll(`#quiz input[type="radio"]:checked`);
+    answers.forEach((answer) => {
+      if (answer.value === "1") {
+        score++;
+      }
+      totalQuestions++;
+    });
+
+    const percentage = (score / totalQuestions) * 100;
+    document.getElementById('results').style.display = "block";
+    document.getElementById('score').innerHTML = `لقد أجبت بشكل صحيح على ${score} من ${totalQuestions} سؤالاً.`;
+    document.getElementById('percentage').innerHTML = `نسبة النجاح: ${percentage.toFixed(2)}%`;
+  }
+</script>
+
+</body>
+</html>
